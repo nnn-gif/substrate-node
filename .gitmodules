@@ -1,0 +1,3 @@
+[submodule "frame/collateral-reader"]
+	path = frame/collateral-reader
+	url = git@github.com:diadata-org/bridgestate-ocw.git

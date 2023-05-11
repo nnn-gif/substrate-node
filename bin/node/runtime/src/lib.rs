@@ -50,6 +50,8 @@ use frame_system::{
 	limits::{BlockLength, BlockWeights},
 	EnsureRoot, EnsureRootWithSuccess, EnsureSigned, EnsureWithSuccess,
 };
+use pallet_collateral_reader;
+
 pub use node_primitives::{AccountId, Signature};
 use node_primitives::{AccountIndex, Balance, BlockNumber, Hash, Index, Moment};
 use pallet_election_provider_multi_phase::SolutionAccuracyOf;
@@ -1330,6 +1332,14 @@ impl pallet_im_online::Config for Runtime {
 	type MaxPeerInHeartbeats = MaxPeerInHeartbeats;
 	type MaxPeerDataEncodingSize = MaxPeerDataEncodingSize;
 }
+impl pallet_collateral_reader::Config for Runtime{
+    type RuntimeEvent = RuntimeEvent;
+    type AssetHelper = crate::pallet_collateral_reader::AssetData;
+    type AuthorityId = crate::pallet_collateral_reader::crypto::TestAuthId;
+	type MaxVec = ConstU32<100>;
+	type GracePeriod = ConstU32<10>;
+}
+
 
 impl pallet_offences::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
@@ -1848,6 +1858,8 @@ construct_runtime!(
 		MessageQueue: pallet_message_queue,
 		Pov: frame_benchmarking_pallet_pov,
 		Statement: pallet_statement,
+		CollateralReader:pallet_collateral_reader,
+
 	}
 );
 
