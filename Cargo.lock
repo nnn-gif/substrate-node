@@ -3920,6 +3920,7 @@ dependencies = [
  "pallet-balances",
  "pallet-bounties",
  "pallet-child-bounties",
+ "pallet-collateral-reader",
  "pallet-collective",
  "pallet-contracts",
  "pallet-contracts-primitives",
@@ -5774,9 +5775,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.17.1"
+version = "1.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b7e5500299e16ebb147ae15a00a942af264cf3688f47923b8fc2cd5858f23ad3"
+checksum = "dd8b5dd2ae5ed71462c540258bedcb51965123ad7e7ccf4b9a8cafaa4a63576d"
 
 [[package]]
 name = "oorandom"
@@ -6182,6 +6183,24 @@ dependencies = [
  "scale-info",
  "sp-core",
  "sp-io",
+ "sp-runtime",
+ "sp-std",
+]
+
+[[package]]
+name = "pallet-collateral-reader"
+version = "0.1.0"
+dependencies = [
+ "frame-metadata",
+ "frame-support",
+ "frame-system",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-keyring",
+ "sp-keystore",
  "sp-runtime",
  "sp-std",
 ]
