@@ -10,4 +10,3 @@ else
     printf "*** Running Substrate Docker container with provided arguments: $args\n\n"
     docker run --rm -it parity/substrate $args
 fi
-
