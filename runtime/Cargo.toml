@@ -136,13 +136,4 @@ try-runtime = [
 	"pallet-asset-conversion-tx-payment/try-runtime",
 	"pallet-indices/try-runtime",
 	"pallet-asset-conversion/try-runtime",
-	"pallet-collateral-reader/try-runtime",
-
-
-
-
-
-
-
-
 ]
