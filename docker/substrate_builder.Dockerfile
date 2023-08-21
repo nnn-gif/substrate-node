@@ -1,29 +1,31 @@
 # This is the build stage for Substrate. Here we create the binary.
-FROM docker.io/paritytech/ci-linux:production as builder
+FROM docker.io/library/ubuntu:20.04 as builder
+
+
+RUN apt-get update -y && \
+	apt-get install -y automake build-essential apt-utils curl  libssl1.1 ca-certificates -y \
+	clang git make libssl-dev llvm libudev-dev protobuf-compiler && \
+	apt-get clean
+
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
+RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN rustup toolchain install nightly-2023-03-20 --force
+RUN rustup default nightly-2023-03-20
+RUN rustup component add rust-src
+RUN rustup update nightly && \
+	rustup update stable && \
+	rustup target add wasm32-unknown-unknown --toolchain nightly-2023-03-20
 
 WORKDIR /substrate
 COPY . /substrate
-RUN cargo build --locked --release
 
-# This is the 2nd stage: a very small image where we copy the Substrate binary."
-FROM docker.io/library/ubuntu:20.04
+RUN cargo build  --release
+
+RUN  cp /substrate/target/release/node-template /usr/local/bin
 
 
-COPY --from=builder /substrate/target/release/substrate /usr/local/bin
-COPY --from=builder /substrate/target/release/subkey /usr/local/bin
-COPY --from=builder /substrate/target/release/node-template /usr/local/bin
-COPY --from=builder /substrate/target/release/chain-spec-builder /usr/local/bin
-
-RUN useradd -m -u 1000 -U -s /bin/sh -d /substrate substrate && \
-	mkdir -p /data /substrate/.local/share/substrate && \
-	chown -R substrate:substrate /data && \
-	ln -s /data /substrate/.local/share/substrate && \
-# Sanity checks
-	ldd /usr/local/bin/substrate && \
-# unclutter and minimize the attack surface
-	rm -rf /usr/bin /usr/sbin && \
-	/usr/local/bin/substrate --version
-
-USER substrate
 EXPOSE 30333 9933 9944 9615
 VOLUME ["/data"]
